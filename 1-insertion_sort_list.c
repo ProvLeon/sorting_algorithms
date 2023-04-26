@@ -1,47 +1,56 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list - function to swap a doubly linked list
- * @list: double pointer that points to the first node
+ * swap_nodes - function to swap the nodes
+ * @list: double pointer to hold the first node
+ * @node1: is a pointer to hold any other secondary node
+ * @node2: second node
  */
-void insertion_sort_list(listint_t **list)
+void swap_nodes(listint_t **list, listint_t *node1, listint_t *node2)
 {
-	listint_t *current;
-
-	if (list == NULL || *list == NULL || (*list)->next == NULL)
+	/* Swap the positions of two nodes in a linked list */
+	if (node1 == node2)
 		return;
 
-	current = (*list)->next;
+	if (node1->prev)
+		node1->prev->next = node2;
+	else
+		*list = node2;
 
-	while (current != NULL)
-	{
-		insert_node(list, current);
-		current = current->next;
-		print_list(*list);
-	}
+	if (node2->next)
+		node2->next->prev = node1;
+
+	node1->next = node2->next;
+	node2->prev = node1->prev;
+	node1->prev = node2;
+	node2->next = node1;
 }
 
 /**
- * insert_node - function to swap the nodes
- * @list: double pointer to hold the first node
- * @node: is a pointer to hold any other secondary node
+ * insertion_sort_list - function to swap a doubly linked list
+ * @list: double pointer that points to the first node
  */
-void insert_node(listint_t **list, listint_t *node)
-{
-	listint_t *temp = node->prev;
 
-	while (temp != NULL && temp->n > node->n)
+void insertion_sort_list(listint_t **list)
+{
+	/* Perform an insertion sort on a linked list */
+	listint_t *cur = NULL, *tmp = NULL;
+
+	if (!list || !(*list) || !((*list)->next))
+		return;
+
+	cur = (*list)->next;
+
+	while (cur)
 	{
-		temp->next = node->next;
-		if (node->next != NULL)
-			node->next->prev = temp;
-		node->next = temp;
-		node->prev = temp->prev;
-		temp->prev = node;
-		if (node->prev == NULL)
-			*list = node;
-		else
-			node->prev->next = node;
-		temp = node->prev;
+		tmp = cur;
+
+		while (tmp && tmp->prev && tmp->n < tmp->prev->n)
+		{
+			swap_nodes(list, tmp->prev, tmp);
+			print_list(*list);
+		}
+
+		cur = cur->next;
 	}
 }
