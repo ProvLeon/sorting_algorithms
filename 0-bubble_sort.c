@@ -13,8 +13,7 @@ void bubble_sort(int *array, size_t size)
 				array[j] = array[j + 1];
 				array[j + 1] = temp;
 				swapped = 1;
-				/* Print the current state of the array after each pass */
-				printf("After pass %d: ", i + 1);
+				/* Print the current state of the array after each pass */	
 				for (k = 0; k < (int)size; k++)
 				{
 					printf("%d ", array[k]);
